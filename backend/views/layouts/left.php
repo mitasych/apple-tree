@@ -19,6 +19,7 @@
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => 'Apple Tree menu', 'options' => ['class' => 'header']],
+                    ['label' => 'Apples', 'icon' => 'apple', 'url' => ['/apple']],
                     ['label' => 'Colors', 'icon' => 'paint-brush', 'url' => ['/apple-color']],
                     ['label' => 'Admin menu', 'options' => ['class' => 'header']],
                     ['label' => 'Users', 'icon' => 'list', 'url' => ['/user']],

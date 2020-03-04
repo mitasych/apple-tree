@@ -2,35 +2,35 @@
 
 namespace backend\controllers;
 
-use backend\models\UserForm;
-use backend\services\UserService;
+use backend\services\AppleService;
 use Yii;
-use common\models\User;
-use common\models\search\UserSearch;
+use common\models\Apple;
+use common\models\search\AppleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * UserController implements the CRUD actions for User model.
+ * AppleController implements the CRUD actions for Apple model.
  */
-class UserController extends Controller
+class AppleController extends Controller
 {
     /**
-     * @var UserService
+     * @var AppleService
      */
-    private $userService;
+    private $appleService;
 
     /**
-     * UserController constructor.
+     * AppleController constructor.
      * @param $id
      * @param $module
-     * @param UserService $userService
+     * @param AppleService $appleService
      * @param array $config
      */
-    public function __construct($id, $module, UserService $userService, $config = [])
+    public function __construct($id, $module, AppleService $appleService, $config = [])
     {
-        $this->userService = $userService;
+        $this->appleService = $appleService;
+
         parent::__construct($id, $module, $config);
     }
 
@@ -50,12 +50,12 @@ class UserController extends Controller
     }
 
     /**
-     * Lists all User models.
+     * Lists all Apple models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new UserSearch();
+        $searchModel = new AppleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -65,7 +65,7 @@ class UserController extends Controller
     }
 
     /**
-     * Displays a single User model.
+     * Displays a single Apple model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -77,28 +77,33 @@ class UserController extends Controller
         ]);
     }
 
+    public function actionGenerate(int $count = null)
+    {
+        $this->appleService->generateApples($count);
+
+        return $this->redirect('index');
+    }
+
     /**
-     * Creates a new User model.
+     * Creates a new Apple model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $form = new UserForm();
+        $model = new Apple();
 
-        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-
-            $user = $this->userService->createUser($form);
-            return $this->redirect(['view', 'id' => $user->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
-            'model' => $form,
+            'model' => $model,
         ]);
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing Apple model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -106,45 +111,41 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $userModel = $this->findModel($id);
+        $model = $this->findModel($id);
 
-        $form = new UserForm($userModel);
-
-        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
-            $user = $this->userService->updateUser($userModel->id, $form);
-            return $this->redirect(['view', 'id' => $user->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
-            'model' => $form,
-            'userId' => $userModel->id
+            'model' => $model,
         ]);
     }
 
     /**
-     * Deletes an existing User model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Deactivates an existing Apple model.
+     * If deactivation is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->appleService->removeApple($id);
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the Apple model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return User the loaded model
+     * @return Apple the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = User::findOne($id)) !== null) {
+        if (($model = Apple::findOne($id)) !== null) {
             return $model;
         }
 
