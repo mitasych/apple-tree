@@ -110,7 +110,15 @@ class Apple extends \yii\db\ActiveRecord
      */
     public function fallToGround(): void
     {
-        $this->state = self::STATE_FELL;
+        if ($this->isOnTree()) {
+            $this->state = self::STATE_FELL;
+            $this->fallen_at = time();
+        }
+        else {
+            $this->checkFell();
+            $this->checkRotten();
+            $this->checkDeleted();
+        }
     }
 
     /**
@@ -120,14 +128,21 @@ class Apple extends \yii\db\ActiveRecord
      */
     public function eat(int $percent): void
     {
-        $this->size =- $percent / 100;
+        if ($this->isFallen()) {
+            $this->size -= $percent / 100;
 
-        if ($this->size < 0) {
-            $this->size = 0;
+            if ($this->size < 0) {
+                $this->size = 0;
+            }
+
+            if ($this->size == 0) {
+                $this->remove();
+            }
         }
-
-        if ($this->size == 0) {
-            $this->remove();
+        else {
+            $this->checkOnTree();
+            $this->checkRotten();
+            $this->checkDeleted();
         }
     }
 
@@ -137,9 +152,71 @@ class Apple extends \yii\db\ActiveRecord
      */
     public function rot(): void
     {
-        $this->state = self::STATE_ROTTEN;
+        if ($this->isFallen()) {
+            $this->state = self::STATE_ROTTEN;
+        }
+        else {
+            $this->checkOnTree();
+            $this->checkRotten();
+            $this->checkDeleted();
+        }
     }
 
+    /**
+     * @return bool
+     */
+    public function isFallen(): bool
+    {
+        return $this->state == self::STATE_FELL && $this->active != self::STATUS_DELETED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnTree(): bool
+    {
+        return $this->state == self::STATE_ON_TREE && $this->active != self::STATUS_DELETED;
+    }
+
+    /**
+     * @return void
+     */
+    public function checkDeleted(): void
+    {
+        if ($this->active == self::STATUS_DELETED) {
+            throw new \DomainException('Apple is deleted.');
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function checkRotten(): void
+    {
+        if ($this->state == self::STATE_ROTTEN) {
+            throw new \DomainException('Rotten apple.');
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function checkOnTree(): void
+    {
+        if ($this->state == self::STATE_ON_TREE) {
+            throw new \DomainException('Apple on the tree.');
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function checkFell(): void
+    {
+        if ($this->state == self::STATE_FELL) {
+            throw new \DomainException('Apple lies on the ground.');
+        }
+    }
 
     /**
      * Gets query for [[AppleColor]].
@@ -148,7 +225,7 @@ class Apple extends \yii\db\ActiveRecord
      */
     public function getColor()
     {
-        return $this->hasOne(AppleColor::className(), ['id' => 'color_id']);
+        return $this->hasOne(AppleColor::class, ['id' => 'color_id']);
     }
 
     /**

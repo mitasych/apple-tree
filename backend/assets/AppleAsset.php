@@ -4,21 +4,16 @@ namespace backend\assets;
 
 use yii\web\AssetBundle;
 
-/**
- * Main backend application asset bundle.
- */
-class AppAsset extends AssetBundle
+class AppleAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
+        'css/circle.css',
     ];
     public $js = [
-        'js/apple.js'
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        AppAsset::class
     ];
 }

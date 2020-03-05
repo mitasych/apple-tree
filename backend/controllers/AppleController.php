@@ -2,11 +2,14 @@
 
 namespace backend\controllers;
 
+use backend\models\EatForm;
 use backend\services\AppleService;
 use Yii;
 use common\models\Apple;
 use common\models\search\AppleSearch;
+use yii\helpers\Json;
 use yii\web\Controller;
+use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -136,6 +139,59 @@ class AppleController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionFall(int $id)
+    {
+        if (Yii::$app->request->isAjax) {
+
+            try {
+                $this->appleService->fallApple($id);
+
+                return Json::encode(['success' => true]);
+            } catch (\Exception $e) {
+                Yii::$app->session->setFlash('error', $e->getMessage());
+
+                return $this->redirect('index');
+            }
+        }
+        else {
+            throw new MethodNotAllowedHttpException();
+        }
+    }
+
+    /**
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws MethodNotAllowedHttpException
+     */
+    public function actionEat(int $id)
+    {
+        if (Yii::$app->request->isAjax) {
+            try {
+                $apple = $this->findModel($id);
+                $form = new EatForm($apple);
+                if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+
+                    try {
+                        $this->appleService->eatApple($form);
+                        return 'success';
+                    } catch (\DomainException $e) {
+                        Yii::$app->session->setFlash('error', $e->getMessage());
+
+                        return $this->redirect('index');
+                    }
+                }
+                return $this->renderAjax('eat_form', ['model' => $form]);
+            } catch (NotFoundHttpException $e) {
+                Yii::$app->session->setFlash('error', $e->getMessage());
+
+                return $this->redirect('index');
+            }
+        }
+        else {
+            throw new MethodNotAllowedHttpException();
+        }
+    }
+
     /**
      * Finds the Apple model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -149,6 +205,6 @@ class AppleController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        throw new NotFoundHttpException(Yii::t('app', 'The requested apple does not exist.'));
     }
 }

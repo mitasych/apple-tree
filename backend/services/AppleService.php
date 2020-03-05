@@ -4,6 +4,7 @@
 namespace backend\services;
 
 
+use backend\models\EatForm;
 use common\models\Apple;
 use common\models\AppleColor;
 use common\repositories\AppleRepository;
@@ -60,6 +61,30 @@ class AppleService
     public function createApple(int $color_id): void
     {
         $apple = Apple::create($color_id);
+
+        $this->apples->save($apple);
+    }
+
+    /**
+     * @param $id
+     */
+    public function fallApple($id): void
+    {
+        $apple = $this->apples->get($id);
+
+        $apple->fallToGround();
+
+        $this->apples->save($apple);
+    }
+
+    /**
+     * @param EatForm $form
+     */
+    public function eatApple(EatForm $form): void
+    {
+        $apple = $form->getApple();
+
+        $apple->eat($form->percent);
 
         $this->apples->save($apple);
     }
