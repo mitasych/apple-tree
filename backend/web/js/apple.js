@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     let eatModalId = '#eatModal';
-    let appleGridWrapper = '#apples-wrapper'
+        let appleGridWrapper = '#apples-wrapper'
 
     $(document).on('click', '.eat-btn', function (e) {
         e.preventDefault();
@@ -53,7 +53,7 @@ $(document).ready(function () {
             url: url,
             dataType: 'json',
             success: function (response) {
-                $.pjax.reload({container: appleGridWrapper, async: false});
+                $.pjax.reload({container: appleGridWrapper});
             }
         });
 
@@ -64,4 +64,7 @@ $(document).ready(function () {
         $(this).find('.modal-body').empty();
     })
 
+    setInterval(function(){
+        $.pjax.reload({container: appleGridWrapper});
+    }, 30000);
 });

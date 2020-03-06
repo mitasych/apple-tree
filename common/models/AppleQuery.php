@@ -31,4 +31,14 @@ class AppleQuery extends \yii\db\ActiveQuery
     {
         return parent::one($db);
     }
+
+    public function toRot()
+    {
+        $rotTime = \Yii::$app->params['appleExpire'];
+
+        $this->active();
+        $this->andWhere("fallen_at <= $rotTime");
+
+        return $this;
+    }
 }

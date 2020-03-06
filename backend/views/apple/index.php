@@ -64,10 +64,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:datetime',
             'fallen_at:datetime',
 
-//            ['class' => 'yii\grid\ActionColumn'],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {fall} {eat}',
+                'template' => '{fall} {eat}',
                 'buttons' => [
                     'fall' => function ($url, \common\models\Apple $model) {
                         $url = \yii\helpers\Url::to(['fall', 'id' => $model->id]);
