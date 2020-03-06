@@ -7,6 +7,7 @@ use backend\services\AppleService;
 use Yii;
 use common\models\Apple;
 use common\models\search\AppleSearch;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\MethodNotAllowedHttpException;
@@ -43,6 +44,15 @@ class AppleController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

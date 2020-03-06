@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'homeUrl' => '/admin',
     'controllerNamespace' => 'backend\controllers',
+    'defaultRoute' => 'apple',
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
