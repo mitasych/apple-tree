@@ -47,6 +47,20 @@ class UserForm extends Model
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'username' => Yii::t('app', 'Username'),
+            'password' => Yii::t('app', 'Password'),
+            'status' => Yii::t('app', 'Status'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+        ];
+    }
+
+    /**
      * Returns User Statuses Collection
      * @return array
      */

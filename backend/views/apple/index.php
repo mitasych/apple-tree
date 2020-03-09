@@ -1,5 +1,6 @@
 <?php
 
+use kartik\date\DatePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -23,7 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin([
         'id' => 'apples-wrapper'
     ]); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -32,37 +32,100 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'attribute' => 'color_id',
+                'filter' => \common\models\AppleColor::listAll(),
                 'format' => 'html',
                 'value' => function(\common\models\Apple $model) {
                     $color = $model->color->color;
-                    return "<i class='fa fa-fw fa-apple' style='color: $color; font-size: 80px'></i>";
+                    return "<i class='fa fa-fw fa-apple' style='color: $color; font-size: 60px'></i>";
                 }
             ],
             [
                 'attribute' => 'state',
+                'filter' => \common\models\Apple::states(),
+                'format' => 'html',
                 'value' => function(\common\models\Apple $model) {
-                    return $model->stateLabel;
+                    $state = $model->state;
+                    switch ($state) {
+                        case \common\models\Apple::STATE_ON_TREE :
+                            return "<span class='label label-warning'>$model->stateLabel</span>";
+                            break;
+                        case \common\models\Apple::STATE_FELL :
+                            return "<span class='label label-success'>$model->stateLabel</span>";
+                            break;
+                        case \common\models\Apple::STATE_ROTTEN :
+                            return "<span class='label label-danger'>$model->stateLabel</span>";
+                            break;
+                        default :
+                            return $model->stateLabel;
+                            break;
+                    }
                 }
             ],
             [
-                'attribute' => 'size',
+                'attribute' => 'percent',
                 'format' => 'html',
+                'label' => Yii::t('app', 'Percent'),
                 'value' => function(\common\models\Apple $model) {
                     $size = $model->size * 100;
 
-                    $html = "<div class='c100 p$size small green'>
+                    return "<div class='c100 p$size mini green'>
                       <span>$size%</span>
                       <div class='slice'>
                         <div class='bar'></div>
                         <div class='fill'></div>
                       </div>
                     </div>";
-
-                    return $html;
                 }
             ],
-            'created_at:datetime',
-            'fallen_at:datetime',
+            [
+                'attribute' => 'created_at',
+                'format' => 'datetime',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'create_date_start',
+                    'attribute2' => 'create_date_end',
+                    'type' => DatePicker::TYPE_RANGE,
+                    'layout' => '<span class="input-group-addon kv-field-separator">' . Yii::t('app', 'from') . '</span>{input1}{separator}{input2}',
+                    'language' => 'ru',
+                    'separator' => Yii::t('app', 'to'),
+                    'convertFormat' => true,
+                    'options' => [
+                        'autocomplete' => 'off'
+                    ],
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd',
+                        'orientation' => 'bottom',
+                        'clearBtn' => true
+                    ],
+                ]),
+                'value' => function(\common\models\Apple $model) {
+                    return $model->created_at;
+                }
+            ],
+            [
+                'attribute' => 'fallen_at',
+                'format' => 'datetime',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'fallen_date_start',
+                    'attribute2' => 'fallen_date_end',
+                    'type' => DatePicker::TYPE_RANGE,
+                    'layout' => '<span class="input-group-addon kv-field-separator">' . Yii::t('app', 'from') . '</span>{input1}{separator}{input2}',
+                    'language' => 'ru',
+                    'separator' => Yii::t('app', 'to'),
+//                     'convertFormat' => true,
+                    'pluginOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-mm-dd',
+                        'orientation' => 'bottom',
+                        'clearBtn' => true
+                    ],
+                ]),
+                'value' => function(\common\models\Apple $model) {
+                    return $model->fallen_at;
+                }
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -105,10 +168,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Eat percent</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+                <h4 class="modal-title"><?php echo Yii::t('app', 'Eat percent') ?></h4>
             </div>
             <div class="modal-body">
 

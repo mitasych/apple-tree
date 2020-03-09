@@ -15,8 +15,13 @@ The application is configured as single-domain-application. Example configuratio
 The minimum requirement by this project template is that your Web server supports PHP 7.1
 
 ## Recommended environvent
+*nix-like OS
+
 DBMS MySql 5.5+
+
 Web-server nginx 1.16+
+
+
 
 ## Deployment
 
@@ -31,7 +36,10 @@ Web-server nginx 1.16+
     ```
 3. Create a new database and adjust the `components['db']` configuration in `/path/to/yii-application/common/config/main-local.php` accordingly.
 
-4. Open a console terminal, apply migrations with command `/path/to/php-bin/php /path/to/yii-application/yii migrate`.
+4. Open a console terminal, apply migrations with command 
+    ```
+    /path/to/php-bin/php /path/to/yii-application/yii migrate
+    ```
 
 5. In terminal execute the `crontab -e` command and set cron task
     ```

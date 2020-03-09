@@ -64,7 +64,7 @@ $(document).ready(function () {
         $(this).find('.modal-body').empty();
     })
 
-    setInterval(function(){
-        $.pjax.reload({container: appleGridWrapper});
-    }, 30000);
+    // setInterval(function(){
+    //     $.pjax.reload({container: appleGridWrapper});
+    // }, 30000);
 });

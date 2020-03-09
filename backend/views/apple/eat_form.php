@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'percent')->textInput()->hint(Yii::t('app', 'Enter a number from 1 to ' . $model->size)) ?>
+    <?= $form->field($model, 'percent')->textInput()->hint(Yii::t('app', Yii::t('app', 'Enter a number from 1 to ') . $model->size)) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('app', 'Eat'), ['class' => 'btn btn-success']) ?>

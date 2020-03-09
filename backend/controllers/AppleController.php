@@ -77,62 +77,11 @@ class AppleController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Apple model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
     public function actionGenerate(int $count = null)
     {
         $this->appleService->generateApples($count);
 
         return $this->redirect('index');
-    }
-
-    /**
-     * Creates a new Apple model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Apple();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Apple model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -149,6 +98,12 @@ class AppleController extends Controller
         return $this->redirect(['index']);
     }
 
+    /**
+     * Drops the apple to the ground
+     * @param int $id
+     * @return string|\yii\web\Response
+     * @throws MethodNotAllowedHttpException
+     */
     public function actionFall(int $id)
     {
         if (Yii::$app->request->isAjax) {
@@ -169,6 +124,7 @@ class AppleController extends Controller
     }
 
     /**
+     * Changes apple size
      * @param int $id
      * @return string|\yii\web\Response
      * @throws MethodNotAllowedHttpException

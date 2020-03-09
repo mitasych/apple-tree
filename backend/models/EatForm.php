@@ -35,6 +35,13 @@ class EatForm extends Model
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'percent' => \Yii::t('app', 'Percent')
+        ];
+    }
+
     /**
      * @return Apple
      */

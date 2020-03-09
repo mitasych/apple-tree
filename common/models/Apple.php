@@ -70,19 +70,6 @@ class Apple extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
-        return [
-            [['color_id', 'state', 'size'], 'required'],
-            [['color_id', 'state', 'fallen_at', 'active'], 'integer'],
-            [['size'], 'number'],
-            [['color_id'], 'exist', 'skipOnError' => true, 'targetClass' => AppleColor::class, 'targetAttribute' => ['color_id' => 'id']],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -191,7 +178,7 @@ class Apple extends \yii\db\ActiveRecord
     /**
      * @return void
      */
-    public function checkRotten(): void
+    private function checkRotten(): void
     {
         if ($this->state == self::STATE_ROTTEN) {
             throw new \DomainException('Rotten apple.');
@@ -201,7 +188,7 @@ class Apple extends \yii\db\ActiveRecord
     /**
      * @return void
      */
-    public function checkOnTree(): void
+    private function checkOnTree(): void
     {
         if ($this->state == self::STATE_ON_TREE) {
             throw new \DomainException('Apple on the tree.');
@@ -211,7 +198,7 @@ class Apple extends \yii\db\ActiveRecord
     /**
      * @return void
      */
-    public function checkFell(): void
+    private function checkFell(): void
     {
         if ($this->state == self::STATE_FELL) {
             throw new \DomainException('Apple lies on the ground.');

@@ -18,11 +18,11 @@
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
-                    ['label' => 'Apple Tree menu', 'options' => ['class' => 'header']],
-                    ['label' => 'Apples', 'icon' => 'apple', 'url' => ['/apple']],
-                    ['label' => 'Colors', 'icon' => 'paint-brush', 'url' => ['/apple-color']],
-                    ['label' => 'Admin menu', 'options' => ['class' => 'header']],
-                    ['label' => 'Users', 'icon' => 'list', 'url' => ['/user']],
+                    ['label' => Yii::t('app', 'Apple Tree menu'), 'options' => ['class' => 'header']],
+                    ['label' => Yii::t('app', 'Apples'), 'icon' => 'apple', 'url' => ['/apple']],
+                    ['label' => Yii::t('app', 'Apple Colors'), 'icon' => 'paint-brush', 'url' => ['/apple-color']],
+                    ['label' => Yii::t('app', 'Admin menu'), 'options' => ['class' => 'header']],
+                    ['label' => Yii::t('app', 'Users'), 'icon' => 'list', 'url' => ['/user']],
                     [
                         'label' => 'Gii',
                         'icon' => 'file-code-o',
