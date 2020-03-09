@@ -29,19 +29,24 @@ Web-server nginx 1.16+
     ```
     git clone https://github.com/mitasych/apple-tree
     ```
+2. In the app-root [install composer](https://getcomposer.org/download/) and install and update packages
 
-2. In terminal execute the `init` command.
+   ```
+   php composer.phar update
+   ``` 
+
+3. In terminal execute the `init` command.
     ```
     /path/to/php-bin/php /path/to/yii-application/init
     ```
-3. Create a new database and adjust the `components['db']` configuration in `/path/to/yii-application/common/config/main-local.php` accordingly.
+4. Create a new database and adjust the `components['db']` configuration in `/path/to/yii-application/common/config/main-local.php` accordingly.
 
-4. Open a console terminal, apply migrations with command 
+5. Open a console terminal, apply migrations with command 
     ```
     /path/to/php-bin/php /path/to/yii-application/yii migrate
     ```
 
-5. In terminal execute the `crontab -e` command and set cron task
+6. In terminal execute the `crontab -e` command and set cron task
     ```
     * * * * * /path/to/php-bin/php /path/to/yii-application/yii apple/rot
     ```
